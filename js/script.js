@@ -1,4 +1,4 @@
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
     // Tabs
@@ -7,7 +7,7 @@ window.addEventListener('DOMContentLoaded', function() {
           info =   document.querySelector('.info-header'),
           tabContent = document.querySelectorAll('.info-tabcontent');
 
-    function hideTabContent(a) {
+    const hideTabContent = (a) => {
         for (let i = a; i < tabContent.length; i++) {
             tabContent[i].classList.remove('show');
             tabContent[i].classList.add('hide');
@@ -16,14 +16,14 @@ window.addEventListener('DOMContentLoaded', function() {
 
     hideTabContent(1);
 
-    function showTabContent(b) {
+    const showTabContent = (b) => {
         if (tabContent[b].classList.contains('hide')) {
             tabContent[b].classList.remove('hide');
             tabContent[b].classList.add('show');
         }
     }
 
-    info.addEventListener('click', function(event) {
+    info.addEventListener('click', (event) => {
         let target = event.target;
 
         if (target && target.classList.contains('info-header-tab')) {
@@ -41,7 +41,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     let deadline = '2020-02-03';
 
-    function getTimeRemaining(endtime) {
+    const getTimeRemaining = (endtime) => {
         let t = Date.parse(endtime) - Date.parse(new Date()),
             seconds = Math.floor((t/1000) % 60),
             minutes = Math.floor((t/1000/60) % 60),
@@ -55,18 +55,17 @@ window.addEventListener('DOMContentLoaded', function() {
         };
     };
 
-    function setClock(id, endtime) {
+    const setClock = (id, endtime) => {
         let timer = document.getElementById(id),
             hours = timer.querySelector('.hours'),
             minutes = timer.querySelector('.minutes'),
-            seconds = timer.querySelector('.seconds'),
-            timeInterval = setInterval(updateClock, 1000);
+            seconds = timer.querySelector('.seconds');            
 
-        function updateClock() {
+        const updateClock = () => {
             let t = getTimeRemaining(endtime);            
-                hours.textContent = t.hours < 10 ? '0' + t.hours : t.hours;
-                minutes.textContent = t.minutes < 10 ? '0' + t.minutes : t.minutes;
-                seconds.textContent = t.seconds < 10 ? '0' + t.seconds : t.seconds;            
+                hours.textContent = t.hours < 10 ? `0${t.hours}` : t.hours;
+                minutes.textContent = t.minutes < 10 ? `0${t.minutes}` : t.minutes;
+                seconds.textContent = t.seconds < 10 ? `0${t.seconds}`: t.seconds;            
 
             if (t.total <= 0) {
                 clearInterval(timeInterval);
@@ -75,32 +74,36 @@ window.addEventListener('DOMContentLoaded', function() {
                 seconds.textContent = '00';
             }
         }
+
+        const timeInterval = setInterval(updateClock, 1000);
     }
 
     setClock('timer', deadline);
 
     // Modal
-
+    
     let more = document.querySelector('.more'),
         overlay = document.querySelector('.overlay'),
         close = document.querySelector('.popup-close'),
         moreTabs = document.querySelectorAll('.description-btn');
 
+    const showModal = () => {
+        overlay.style.display = 'block';
+        more.classList.add('more-splash');
+        document.body.style.overflow = 'hidden';
+    }
+
     more.addEventListener('click', showModal);
-    
-    moreTabs.forEach(function(item) {
+
+    moreTabs.forEach((item) => {
         item.addEventListener('click', showModal);
     });    
 
-    close.addEventListener('click', function() {
+    close.addEventListener('click', () => {
         overlay.style.display = 'none';
         more.classList.remove('more-splash');
         document.body.style.overflow = '';
     });
 
-    function showModal() {
-        overlay.style.display = 'block';
-        this.classList.add('more-splash');
-        document.body.style.overflow = 'hidden';
-    }
+    
 });
